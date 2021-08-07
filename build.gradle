@@ -1,6 +1,8 @@
+
 buildscript {
     repositories {
         mavenCentral()
+		jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -9,9 +11,13 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            name = "jitpack"
+            url = "https://jitpack.io"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath "com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT"
     }
 }
 
