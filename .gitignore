@@ -19,3 +19,4 @@
 # Mac Stuff
 .DS_Store
 *.command
+*.bat
