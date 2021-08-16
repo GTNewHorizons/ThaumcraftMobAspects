@@ -31,7 +31,7 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "1.7.x-${config.mod_version}"
+version = "1.7.10-${config.mod_version}"
 group= "iguanaman" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ThaumcraftMobAspects"
 
