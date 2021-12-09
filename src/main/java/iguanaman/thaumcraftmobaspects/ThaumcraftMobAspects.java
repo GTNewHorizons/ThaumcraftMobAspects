@@ -1,7 +1,5 @@
 package iguanaman.thaumcraftmobaspects;
 
-import iguanaman.thaumcraftmobaspects.UpdateChecker.Result;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,7 +22,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -41,20 +38,17 @@ public class ThaumcraftMobAspects {
     public static ThaumcraftMobAspects instance;
     
 	private File configDirectory;
-	
-	public Result result;
 
 	@EventHandler
 	public void pre(FMLPreInitializationEvent event)
 	{
 		configDirectory = event.getModConfigurationDirectory();
-		result = UpdateChecker.runUpdateCheck();
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		FMLCommonHandler.instance().bus().register(UpdateChecker.instance.new UpdaterEventHook());
+
 	}
 
 	@EventHandler
