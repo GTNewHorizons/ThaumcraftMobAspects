@@ -1,10 +1,10 @@
 [
 {
-  "modid": "ThaumcraftMobAspects",
-  "name": "Thaumcraft Mob Aspects",
+  "modid": "${modId}",
+  "name": "${modName}",
   "description": "Adds Thaumcraft aspects to various mod's mobs",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
   "url": "",
   "updateUrl": "",
   "authorList": ["iguana_man", "lycaon", "XanderGryphon"],
