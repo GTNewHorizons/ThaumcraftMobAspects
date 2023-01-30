@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import net.minecraft.entity.EntityList;
+
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -30,167 +31,157 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid=ModInfo.MODID, name=ModInfo.MOD_NAME, version=ModInfo.VERSION, dependencies=ModInfo.DEPENDENCIES)
+@Mod(modid = ModInfo.MODID, name = ModInfo.MOD_NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
 public class ThaumcraftMobAspects {
-	
+
     // The instance of your mod that Forge uses.
     @Instance(ModInfo.MODID)
     public static ThaumcraftMobAspects instance;
-    
-	private File configDirectory;
 
-	@EventHandler
-	public void pre(FMLPreInitializationEvent event)
-	{
-		configDirectory = event.getModConfigurationDirectory();
-	}
-	
-	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{
+    private File configDirectory;
 
-	}
+    @EventHandler
+    public void pre(FMLPreInitializationEvent event) {
+        configDirectory = event.getModConfigurationDirectory();
+    }
 
-	@EventHandler
-	public void post(FMLPostInitializationEvent event)
-	{
-		ModFileCache files = new ModFileCache(configDirectory);
-		HashSet<String> modIds = files.getModIds();
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
 
-		HashMultimap<String, ThaumcraftEntity> modIdToMobs = HashMultimap.create();
-		// Read Entries from Configuration Files
-		for (String modId : modIds)
-		{
-			Optional<File> file = files.getFile(modId);
-			if (file.isPresent())
-			{
-				readFromFile(file.get(), modIdToMobs.get(modId));
-			}
-		}
+    }
 
-		// Add Default Values that may not be in files
-		modIdToMobs.put(
-				ModFileCache.PLAYER_CATEGORY,
-				new ThaumcraftEntity("the_iguana_man", bossAspects(5, Aspect.MAN, Aspect.MIND, Aspect.SOUL,
-						Aspect.LIFE, Aspect.MAGIC, Aspect.ELDRITCH, Aspect.ENERGY, Aspect.HUNGER)));
-		modIdToMobs.put(
-				ModFileCache.PLAYER_CATEGORY,
-				new ThaumcraftEntity("XanderGryphon", bossAspects(5, Aspect.MAN, Aspect.MIND, Aspect.SOUL, Aspect.LIFE,
-						Aspect.MAGIC, Aspect.ELDRITCH, Aspect.ENERGY, Aspect.HUNGER)));
+    @EventHandler
+    public void post(FMLPostInitializationEvent event) {
+        ModFileCache files = new ModFileCache(configDirectory);
+        HashSet<String> modIds = files.getModIds();
 
-		AspectPlugin[] plugins = new AspectPlugin[]
-		{ new PluginLycanitesMobs(), new PluginMoCreatures(), new PluginSpecialMobs(), new PluginTwilightForest() };
-		for (AspectPlugin aspectPlugin : plugins)
-		{
-			if (shouldLoadPlugin(aspectPlugin))
-			{
-				for (ThaumcraftEntity mob : aspectPlugin.getThaumcraftMobs())
-				{
-					modIdToMobs.put(files.guessModId(mob.entityName), mob);
-				}
-			}
-		}
+        HashMultimap<String, ThaumcraftEntity> modIdToMobs = HashMultimap.create();
+        // Read Entries from Configuration Files
+        for (String modId : modIds) {
+            Optional<File> file = files.getFile(modId);
+            if (file.isPresent()) {
+                readFromFile(file.get(), modIdToMobs.get(modId));
+            }
+        }
 
-		// Add Generic Entities that have no values
-		for (Object object : EntityList.stringToClassMapping.keySet())
-		{
-			String entityName = (String) object;
-			modIdToMobs.put(files.guessModId(entityName), new ThaumcraftEntity(entityName));
-		}
+        // Add Default Values that may not be in files
+        modIdToMobs.put(
+                ModFileCache.PLAYER_CATEGORY,
+                new ThaumcraftEntity(
+                        "the_iguana_man",
+                        bossAspects(
+                                5,
+                                Aspect.MAN,
+                                Aspect.MIND,
+                                Aspect.SOUL,
+                                Aspect.LIFE,
+                                Aspect.MAGIC,
+                                Aspect.ELDRITCH,
+                                Aspect.ENERGY,
+                                Aspect.HUNGER)));
+        modIdToMobs.put(
+                ModFileCache.PLAYER_CATEGORY,
+                new ThaumcraftEntity(
+                        "XanderGryphon",
+                        bossAspects(
+                                5,
+                                Aspect.MAN,
+                                Aspect.MIND,
+                                Aspect.SOUL,
+                                Aspect.LIFE,
+                                Aspect.MAGIC,
+                                Aspect.ELDRITCH,
+                                Aspect.ENERGY,
+                                Aspect.HUNGER)));
 
-		// Write All Entries to File
-		for (String modId : modIdToMobs.keySet())
-		{
-			Optional<File> file = files.getFile(modId);
-			if (file.isPresent())
-			{
-				saveToFile(file.get(), modIdToMobs.get(modId));
-			}
-		}
+        AspectPlugin[] plugins = new AspectPlugin[] { new PluginLycanitesMobs(), new PluginMoCreatures(),
+                new PluginSpecialMobs(), new PluginTwilightForest() };
+        for (AspectPlugin aspectPlugin : plugins) {
+            if (shouldLoadPlugin(aspectPlugin)) {
+                for (ThaumcraftEntity mob : aspectPlugin.getThaumcraftMobs()) {
+                    modIdToMobs.put(files.guessModId(mob.entityName), mob);
+                }
+            }
+        }
 
-		// Register valid, non-empty entries with our Thaumcraft overlord
-		for (ThaumcraftEntity mob : modIdToMobs.values())
-		{
-			AspectList aspectList = new AspectList();
-			for (Entry<String, Integer> entry : mob.aspects.entrySet())
-			{
-				Aspect aspect = Aspect.aspects.get(entry.getKey());
-				if (aspect != null)
-				{
-					aspectList.add(aspect, entry.getValue());
-				}
-			}
-			if (aspectList.size() > 0)
-			{
-				ThaumcraftApi.registerEntityTag(mob.entityName, aspectList);
-			}
-		}
-	}
+        // Add Generic Entities that have no values
+        for (Object object : EntityList.stringToClassMapping.keySet()) {
+            String entityName = (String) object;
+            modIdToMobs.put(files.guessModId(entityName), new ThaumcraftEntity(entityName));
+        }
 
-	private boolean shouldLoadPlugin(AspectPlugin plugin)
-	{
-		for (String modID : plugin.getRequiredMods())
-		{
-			if (!Loader.isModLoaded(modID))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+        // Write All Entries to File
+        for (String modId : modIdToMobs.keySet()) {
+            Optional<File> file = files.getFile(modId);
+            if (file.isPresent()) {
+                saveToFile(file.get(), modIdToMobs.get(modId));
+            }
+        }
 
-	private void readFromFile(File configFile, Set<ThaumcraftEntity> mobs)
-	{
-		try
-		{
-			Reader reader = new InputStreamReader(new FileInputStream(configFile));
-			Gson gson = new GsonBuilder().create();
-			// Array is required as GSON seems to have trouble with MultiMapSet
-			ThaumcraftEntity[] readMobs = gson.fromJson(reader, ThaumcraftEntity[].class);
-			if (readMobs != null)
-			{
-				for (ThaumcraftEntity thaumcraftMob : readMobs)
-				{
-					mobs.add(thaumcraftMob);
-				}
-			}
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+        // Register valid, non-empty entries with our Thaumcraft overlord
+        for (ThaumcraftEntity mob : modIdToMobs.values()) {
+            AspectList aspectList = new AspectList();
+            for (Entry<String, Integer> entry : mob.aspects.entrySet()) {
+                Aspect aspect = Aspect.aspects.get(entry.getKey());
+                if (aspect != null) {
+                    aspectList.add(aspect, entry.getValue());
+                }
+            }
+            if (aspectList.size() > 0) {
+                ThaumcraftApi.registerEntityTag(mob.entityName, aspectList);
+            }
+        }
+    }
 
-	private void saveToFile(File configFile, Set<ThaumcraftEntity> mobs)
-	{
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try
-		{
-			Writer output = new OutputStreamWriter(new FileOutputStream(configFile));
-			gson.toJson(mobs, output);
-			output.close();
-		} catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-	}
+    private boolean shouldLoadPlugin(AspectPlugin plugin) {
+        for (String modID : plugin.getRequiredMods()) {
+            if (!Loader.isModLoaded(modID)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	public static AspectList creatureAspects(int size, Aspect... aspects)
-	{
-		int sizeMod = Math.max(Math.round((float) size / (float) aspects.length), 1);
-		AspectList result = new AspectList().add(Aspect.BEAST, size);
-		for (Aspect aspect : aspects)
-			result.add(aspect, sizeMod);
-		return result;
-	}
+    private void readFromFile(File configFile, Set<ThaumcraftEntity> mobs) {
+        try {
+            Reader reader = new InputStreamReader(new FileInputStream(configFile));
+            Gson gson = new GsonBuilder().create();
+            // Array is required as GSON seems to have trouble with MultiMapSet
+            ThaumcraftEntity[] readMobs = gson.fromJson(reader, ThaumcraftEntity[].class);
+            if (readMobs != null) {
+                for (ThaumcraftEntity thaumcraftMob : readMobs) {
+                    mobs.add(thaumcraftMob);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static AspectList bossAspects(int amount, Aspect... aspects)
-	{
-		AspectList result = new AspectList().add(Aspect.EARTH, amount).add(Aspect.AIR, amount).add(Aspect.FIRE, amount)
-				.add(Aspect.ENTROPY, amount).add(Aspect.WATER, amount).add(Aspect.ORDER, amount);
+    private void saveToFile(File configFile, Set<ThaumcraftEntity> mobs) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            Writer output = new OutputStreamWriter(new FileOutputStream(configFile));
+            gson.toJson(mobs, output);
+            output.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
 
-		for (Aspect aspect : aspects)
-			result.add(aspect, amount);
+    public static AspectList creatureAspects(int size, Aspect... aspects) {
+        int sizeMod = Math.max(Math.round((float) size / (float) aspects.length), 1);
+        AspectList result = new AspectList().add(Aspect.BEAST, size);
+        for (Aspect aspect : aspects) result.add(aspect, sizeMod);
+        return result;
+    }
 
-		return result;
-	}
+    public static AspectList bossAspects(int amount, Aspect... aspects) {
+        AspectList result = new AspectList().add(Aspect.EARTH, amount).add(Aspect.AIR, amount).add(Aspect.FIRE, amount)
+                .add(Aspect.ENTROPY, amount).add(Aspect.WATER, amount).add(Aspect.ORDER, amount);
+
+        for (Aspect aspect : aspects) result.add(aspect, amount);
+
+        return result;
+    }
 }

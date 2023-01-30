@@ -3,5 +3,5 @@
 dependencies {
     compile("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
 
-    runtime("com.github.GTNewHorizons:Baubles:master-SNAPSHOT:dev")
+    runtimeOnly("com.github.GTNewHorizons:Baubles:master-SNAPSHOT:dev")
 }
