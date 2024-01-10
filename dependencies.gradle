@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
+    api("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
 
-    runtimeOnly("com.github.GTNewHorizons:Baubles:master-SNAPSHOT:dev")
+    runtimeOnly("com.github.GTNewHorizons:Baubles:1.0.3:dev")
 }
