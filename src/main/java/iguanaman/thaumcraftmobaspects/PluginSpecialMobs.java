@@ -9,7 +9,7 @@ public class PluginSpecialMobs implements AspectPlugin {
 
     @Override
     public String[] getRequiredMods() {
-        return new String[] { "SpecialMobs" };
+        return new String[]{"SpecialMobs"};
     }
 
     @Override
@@ -194,9 +194,4 @@ public class PluginSpecialMobs implements AspectPlugin {
 
         return mobs;
     }
-
-    public static AspectList creatureAspects(int size, Aspect... aspects) {
-        return ThaumcraftMobAspects.creatureAspects(size, aspects);
-    }
-
 }
