@@ -93,8 +93,15 @@ public class ThaumcraftMobAspects {
                                 Aspect.ENERGY,
                                 Aspect.HUNGER)));
 
-        AspectPlugin[] plugins = new AspectPlugin[] { new PluginLycanitesMobs(), new PluginMoCreatures(),
-                new PluginSpecialMobs(), new PluginTwilightForest() };
+        AspectPlugin[] plugins = new AspectPlugin[]{
+                new PluginLycanitesMobs(),
+                new PluginMoCreatures(),
+                new PluginSpecialMobs(),
+                new PluginTwilightForest(),
+                new PluginBiomesOPlenty(),
+                new PluginEnderZoo()
+        };
+
         for (AspectPlugin aspectPlugin : plugins) {
             if (shouldLoadPlugin(aspectPlugin)) {
                 for (ThaumcraftEntity mob : aspectPlugin.getThaumcraftMobs()) {
