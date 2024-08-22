@@ -43,7 +43,8 @@ public class PluginEnderZoo implements AspectPlugin {
         mobs.add(
                 new ThaumcraftEntity(
                         "enderzoo.ConcussionCreeper",
-                        new AspectList().add(Aspect.PLANT, 2).add(Aspect.FIRE, 2).add(Aspect.TRAVEL, 2)));
+                        new AspectList().add(Aspect.PLANT, 2).add(Aspect.FIRE, 2).add(Aspect.TRAVEL, 2)
+                                .add(Aspect.ENTROPY, 2)));
         mobs.add(new ThaumcraftEntity("enderzoo.DireSlime", new AspectList().add(Aspect.EARTH, 2).add(Aspect.LIFE, 1)));
 
         return mobs;

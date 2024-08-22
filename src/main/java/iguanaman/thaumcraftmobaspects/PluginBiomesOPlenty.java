@@ -20,11 +20,12 @@ public class PluginBiomesOPlenty implements AspectPlugin {
                 new ThaumcraftEntity(
                         "BiomesOPlenty.Rosester",
                         new AspectList().add(Aspect.BEAST, 2).add(Aspect.FLIGHT, 2).add(Aspect.AIR, 1)
-                                .add(Aspect.LIFE, 1)));
+                                .add(Aspect.LIFE, 1).add(Aspect.FIRE, 1)));
         mobs.add(
                 new ThaumcraftEntity(
                         "BiomesOPlenty.JungleSpider",
-                        new AspectList().add(Aspect.BEAST, 1).add(Aspect.ENTROPY, 1).add(Aspect.PLANT, 1)));
+                        new AspectList().add(Aspect.BEAST, 1).add(Aspect.ENTROPY, 1).add(Aspect.PLANT, 1)
+                                .add(Aspect.POISON, 1).add(Aspect.VOID, 1)));
         mobs.add(
                 new ThaumcraftEntity(
                         "BiomesOPlenty.Wasp",
