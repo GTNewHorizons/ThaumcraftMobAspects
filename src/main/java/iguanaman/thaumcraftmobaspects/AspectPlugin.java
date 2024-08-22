@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 public interface AspectPlugin {
 
-    public String[] getRequiredMods();
+    String[] getRequiredMods();
 
-    public HashSet<ThaumcraftEntity> getThaumcraftMobs();
+    HashSet<ThaumcraftEntity> getThaumcraftMobs();
 }
